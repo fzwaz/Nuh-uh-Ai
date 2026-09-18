@@ -1,8 +1,10 @@
 from evidence_extractor import extract_page
 
-url = "https://example.com"
+url = "https://science.nasa.gov/earth/facts/"
 
-text = extract_page(url)
+evidence = extract_page(url)
 
-print("Text length:", len(text))
-print("Preview:", text[:500])
+print("Title:", evidence["title"])
+print("URL:", evidence["url"])
+print("Text length:", len(evidence["text"]))
+print("Preview:", evidence["text"][:500])

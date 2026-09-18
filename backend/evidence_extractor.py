@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def extract_page(url: str) -> str:
+def extract_page(url: str) -> dict:
     try:
         response = requests.get(
             url,
@@ -16,7 +16,22 @@ def extract_page(url: str) -> str:
 
         soup = BeautifulSoup(response.text, "html.parser")
 
-        return soup.get_text(" ", strip=True)
+        for element in soup(["script", "style", "nav", "header", "footer"]):
+            element.decompose()
+
+        title = soup.title.get_text(strip=True) if soup.title else ""
+
+        text = soup.get_text(" ", strip=True)[:10000]
+
+        return {
+            "title": title,
+            "url": url,
+            "text": text
+        }
 
     except requests.RequestException:
-        return ""
+        return {
+            "title": "",
+            "url": url,
+            "text": ""
+        }
